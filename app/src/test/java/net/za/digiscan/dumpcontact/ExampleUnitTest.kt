@@ -1,4 +1,4 @@
-package com.altron.dumpcontact
+package net.za.digiscan.dumpcontact
 
 import org.junit.Test
 
