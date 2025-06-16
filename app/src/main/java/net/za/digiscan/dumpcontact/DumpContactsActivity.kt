@@ -1,4 +1,4 @@
-package com.altron.dumpcontact
+package net.za.digiscan.dumpcontact
 
 import android.Manifest
 import android.content.ContentValues
@@ -201,12 +201,10 @@ class DumpContactsActivity : AppCompatActivity() {
                     put(MediaStore.MediaColumns.DATA, "${downloadsDir.absolutePath}/$dynamicCallLogFileName") // Use dynamic filename
                 }
             }
-            
-            var uri: Uri? = null
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                 uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+            var uri: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
             } else {
-                uri = contentResolver.insert(MediaStore.Files.getContentUri("external"), contentValues)
+                contentResolver.insert(MediaStore.Files.getContentUri("external"), contentValues)
             }
 
 

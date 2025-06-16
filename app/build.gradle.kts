@@ -4,17 +4,26 @@ plugins {
 }
 
 android {
-    namespace = "com.altron.dumpcontact"
+    namespace = "net.za.digiscan.dumpcontact"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.altron.dumpcontact"
+        applicationId = "net.za.digiscan.dumpcontact"
         minSdk = 21
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("C:/Users/schelteg/Documents/OneDrive - gerhardus03/OneDrive/Documents/Keys/AndroidDevelopmentKeystore.jks")
+            storePassword = "Ul47sjYXanQru4i8ouL80q7QwwXIJl"
+            keyAlias = "LogDump"
+            keyPassword = "JLf4yCQMNgMgtpKD4pA2Ch8vZjmzoA"
+        }
     }
 
     buildTypes {
