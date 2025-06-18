@@ -10,7 +10,7 @@
         android:id="@+id/dumpContactsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Export Call Log"
+        android:text="@string/call_log_button_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +20,7 @@
         android:id="@+id/exportMessagesButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Export Messages"
+        android:text="@string/messages_button_text"
         app:layout_constraintTop_toBottomOf="@id/dumpContactsButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -29,7 +29,7 @@
         android:id="@+id/exportContactsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Export Contacts"
+        android:text="@string/contacts_button_text"
         app:layout_constraintTop_toBottomOf="@id/exportMessagesButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

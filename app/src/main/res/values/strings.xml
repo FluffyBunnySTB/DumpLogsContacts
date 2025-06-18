@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Export call logs</string>
+
+    <!-- Add your button texts here -->
+    <string name="call_log_button_text">Export Call Log</string>
+    <string name="messages_button_text">Export Messages</string>
+    <string name="contacts_button_text">Export Contacts</string>
 </resources>
