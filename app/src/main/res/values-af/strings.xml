@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rugsteun oproep inskrywings</string>
+    <string name="call_log_button_text">Rugsteun Oproepe</string>
+    <string name="messages_button_text">Rugsteun Boodskappe</string>
+    <string name="contacts_button_text">Rugsteun Kontakte</string>
+    <string name="err_call_log_privilege">Oproep inskrywing of berging regte nie toegeken nie.</string>
+    <string name="err_messages_privilege">SMS boodskap of berging regte ni toegeken nie.</string>
+    <string name="err_contacts_privilege">Kontakte of berging regte nie toegeken nie.</string>
+    <string name="call_log_error_unexpected">Oproep inskrywing, onverwagste probleem: %s</string>
+    <string name="sms_exported_success_message">SMS boodskappe uitgevoer na die Aflaai leër, %s</string>
+    <string name="err_media_store">Kon nie stoor inskrywing maak vir boodskappe CSV nie.</string>
+    <string name="err_export_contacts_permissions">Kon nie kontakte uitskry nie. Die benodigde toestemmings is nie daar nie.</string>
+    <string name="err_could_not_read_contacts">Kon nie die kontakte lees nie.</string>
+    <string name="err_no_contacts">Geen kontakte om uit te skryf nie.</string>
+    <string name="err_reading_call_log">Kon nie oproep inskrywings lees nie: %s</string>
+    <string name="err_reading_call_log_or_permission_issued">Geen oproep inskrywings of toestemming probleem</string>
+    <string name="call_log_success">Oproep inskywings uitgeskryf na \"Downloads\" met: %s</string>
+    <string name="call_log_error">Kon nie stoor inskywing maak vir CSV nie.</string>
+    <string name="call_log_error_export">Kon nie oproep inskrywing uitskryf nie: %s</string>
+    <string name="sms_exported_error_message">Kon nie boodskappe uitskry nie: %s</string>
+    <string name="sms_exported_unexpected_error_message">Onverwagse probleem met boodskappe uitskryf: %s</string>
+    <string name="msg_could_not_read_sms">Kon nie boodskappe lees nie.</string>
+    <string name="msg_no_sms_to_export">Geen boodskappe om uit te skry nie.</string>
+    <string name="permissions_granted">Alle toestemming is toegestaan.</string>
+    <string name="permissions_partially_granted">Gedeeltelike toestemming toegestaan, jy mag dalk probleme ondervind.</string>
+    <string name="permissions_sms_not_granted">Boodskap toestemmings nie toegestaan nie.</string>
+    <string name="contacts_exported_success_message">Kontakte uitgeskryf na \"Downloads\" leër met %s</string>
+    <string name="contacts_err_creating_media_store">Kon nie stoor inskrywing maak vir kontakte nie.</string>
+    <string name="contacts_err_exporting_contacts">Kon nie kontakte uitskryf nie: %s</string>
+    <string name="contacts_err_unexpected_error">Onverwagse fout met kontakte uitskryf: %s</string>
+</resources>

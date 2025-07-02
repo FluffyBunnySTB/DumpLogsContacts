@@ -1,8 +1,34 @@
 <resources>
-    <string name="app_name">Export call logs</string>
+    <string name="app_name">Export Call logs</string>
 
     <!-- Add your button texts here -->
     <string name="call_log_button_text">Export Call Log</string>
     <string name="messages_button_text">Export Messages</string>
     <string name="contacts_button_text">Export Contacts</string>
+    <string name="err_call_log_privilege">Call Log or Storage permission missing.</string>
+    <string name="err_messages_privilege">SMS or Storage permission missing.</string>
+    <string name="err_contacts_privilege">Contacts or Storage permission missing.</string>
+    <string name="err_reading_call_log">Error reading call log: %s</string>
+    <string name='err_reading_call_log_or_permission_issued'>No call log data to export or permission issue.</string>'
+    <string name='call_log_success'>Call log exported to Downloads folder as: %s</string>
+    <string name='call_log_error'>Error creating MediaStore entry for CSV.</string>
+    <string name="call_log_error_export">Error exporting call log: %s</string>
+    <string name="call_log_error_unexpected">An unexpected error occurred during call log export: %s</string>
+    <string name="sms_exported_success_message">SMS messages exported to Downloads as %s</string>
+    <string name="sms_exported_error_message">Error exporting SMS: %s</string>
+    <string name="sms_exported_unexpected_error_message">An unexpected error occurred during SMS export: %s</string>
+    <string name="err_media_store">Error creating MediaStore entry for SMS CSV.</string>
+    <string name="err_export_contacts_permissions">Cannot export Contacts. Required permissions missing.</string>
+    <string name="err_could_not_read_contacts">Could not read Contacts.</string>
+    <string name="err_no_contacts">No contacts to export</string>
+    <string name="msg_could_not_read_sms">Could not read SMS messages.</string>
+    <string name="msg_no_sms_to_export">No SMS messages to export.</string>
+    <string name="permissions_granted">All required permissions granted!</string>
+    <string name="permissions_partially_granted">Some permissions were denied. Functionality may be limited.</string>
+    <string name="permissions_sms_not_granted">SMS permissions not granted.</string>">
+    <string name="contacts_exported_success_message">Contacts exported to Downloads as %s</string>">
+    <string name="contacts_err_creating_media_store">Error creating MediaStore entry for Contacts CSV.</string>
+    <string name="contacts_err_exporting_contacts">Error exporting Contacts: %s</string>"
+    <string name="contacts_err_unexpected_error">An unexpected error occurred during Contacts export: %s</string>
+
 </resources>

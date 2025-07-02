@@ -12,10 +12,15 @@ import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.provider.Telephony
 import android.widget.Button
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import java.io.IOException
 import java.io.OutputStreamWriter
 import java.text.SimpleDateFormat
@@ -33,8 +38,20 @@ class DumpContactsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_dump_contacts)
-
+        val mainLayout =
+            findViewById<ConstraintLayout>(R.id.main_content) // Or whatever your root layout is
+        ViewCompat.setOnApplyWindowInsetsListener(mainLayout) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(
+                left = insets.left,
+                top = insets.top,
+                right = insets.right,
+                bottom = insets.bottom
+            )
+            WindowInsetsCompat.CONSUMED // Or return the insets if you want to propagate them further
+        }
         exportCallLogButton = findViewById(R.id.dumpContactsButton)
         exportSmsButton = findViewById(R.id.exportMessagesButton)
         exportContactsButton = findViewById(R.id.exportContactsButton)
@@ -46,7 +63,7 @@ class DumpContactsActivity : AppCompatActivity() {
             if (hasPermission(Manifest.permission.READ_CALL_LOG) && hasStoragePermissionIfNeeded()) {
                 exportCallLogToCsv()
             } else {
-                Toast.makeText(this, "Call Log or Storage permission missing.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "@string/err_call_log_privilege", Toast.LENGTH_SHORT).show()
                 checkAndRequestAllAppPermissions()
             }
         }
@@ -55,7 +72,7 @@ class DumpContactsActivity : AppCompatActivity() {
             if (hasPermission(Manifest.permission.READ_SMS) && hasStoragePermissionIfNeeded()) {
                 exportSmsToCsv()
             } else {
-                Toast.makeText(this, "SMS or Storage permission missing.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "@string/err_messages_privilege", Toast.LENGTH_SHORT).show()
                 checkAndRequestAllAppPermissions()
             }
         }
@@ -64,7 +81,7 @@ class DumpContactsActivity : AppCompatActivity() {
             if (hasPermission(Manifest.permission.READ_CONTACTS) && hasStoragePermissionIfNeeded()) {
                 exportContactsToCsv()
             } else {
-                Toast.makeText(this, "Contacts or Storage permission missing.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "@string/err_contacts_privilege", Toast.LENGTH_SHORT).show()
                 checkAndRequestAllAppPermissions()
             }
         }
@@ -124,9 +141,9 @@ class DumpContactsActivity : AppCompatActivity() {
             }
 
             if (allGranted) {
-                Toast.makeText(this, "All required permissions granted!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.permissions_granted, Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Some permissions were denied. Functionality may be limited.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, R.string.permissions_partially_granted, Toast.LENGTH_LONG).show()
             }
             updateButtonStates()
         }
@@ -134,7 +151,7 @@ class DumpContactsActivity : AppCompatActivity() {
 
     private fun exportSmsToCsv() {
         if (!hasPermission(Manifest.permission.READ_SMS) || !hasStoragePermissionIfNeeded()) {
-            Toast.makeText(this, "Cannot export SMS. Required permissions missing.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "@string/permissions_sms_not_granted", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -188,12 +205,12 @@ class DumpContactsActivity : AppCompatActivity() {
                 smsList.add(entry)
             }
         } ?: run {
-            Toast.makeText(this, "Could not read SMS messages.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "@string/msg_could_not_read_sms", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (smsList.isEmpty()) {
-            Toast.makeText(this, "No SMS messages to export.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "@string/msg_no_sms_to_export", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -236,27 +253,29 @@ class DumpContactsActivity : AppCompatActivity() {
 
             uri?.let {
                 contentResolver.openOutputStream(it).use { outputStream ->
-                    OutputStreamWriter(outputStream).use { writer ->
+                    OutputStreamWriter(outputStream, java.nio.charset.StandardCharsets.UTF_8).use { writer ->
                         writer.write(csvData.toString())
                     }
                 }
-                Toast.makeText(this, "SMS messages exported to Downloads as $dynamicSmsFileName", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.sms_exported_success_message, dynamicSmsFileName), Toast.LENGTH_LONG).show()
             } ?: run {
-                Toast.makeText(this, "Error creating MediaStore entry for SMS CSV.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.err_media_store), Toast.LENGTH_LONG).show()
             }
 
         } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(this, "Error exporting SMS: ${e.message}", Toast.LENGTH_LONG).show()
+            // Error exporting SMS with message
+            Toast.makeText(this, getString(R.string.sms_exported_error_message, e.message ?: "Unknown Error"), Toast.LENGTH_LONG).show()  //"Error exporting SMS: ${e.message}", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "An unexpected error occurred during SMS export: ${e.message}", Toast.LENGTH_LONG).show()
+            // Unexpected error exporting SMS with message
+            Toast.makeText(this, getString(R.string.sms_exported_unexpected_error_message, e.message ?: "Unknown Error"), Toast.LENGTH_LONG).show()
         }
     }
 
     private fun exportContactsToCsv() {
         if (!hasPermission(Manifest.permission.READ_CONTACTS) || !hasStoragePermissionIfNeeded()) {
-            Toast.makeText(this, "Cannot export Contacts. Required permissions missing.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "@string/err_export_contacts_permissions", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -330,12 +349,12 @@ class DumpContactsActivity : AppCompatActivity() {
                 ))
             }
         } ?: run {
-            Toast.makeText(this, "Could not read Contacts.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "@string/err_could_not_read_contacts", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (contactsList.isEmpty()) {
-            Toast.makeText(this, "No contacts to export.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "@strings/err_no_contacts", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -377,21 +396,24 @@ class DumpContactsActivity : AppCompatActivity() {
 
             uri?.let {
                 contentResolver.openOutputStream(it).use { outputStream ->
-                    OutputStreamWriter(outputStream).use { writer ->
+                    OutputStreamWriter(outputStream, java.nio.charset.StandardCharsets.UTF_8).use { writer ->
                         writer.write(csvData.toString())
                     }
                 }
-                Toast.makeText(this, "Contacts exported to Downloads as $dynamicContactsFileName", Toast.LENGTH_LONG).show()
+                // Contacts export success
+                Toast.makeText(this, getString(R.string.contacts_exported_success_message, dynamicContactsFileName), Toast.LENGTH_LONG).show()
             } ?: run {
-                Toast.makeText(this, "Error creating MediaStore entry for Contacts CSV.", Toast.LENGTH_LONG).show()
+                // Contact export MediaStore error
+                Toast.makeText(this, "@string/contacts_err_creating_media_store", Toast.LENGTH_LONG).show()
             }
 
         } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(this, "Error exporting Contacts: ${e.message}", Toast.LENGTH_LONG).show()
+            // Error exporting Contacts: $message
+            Toast.makeText(this, getString(R.string.contacts_err_exporting_contacts, e.message ?: "Unknown Error"), Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "An unexpected error occurred during Contacts export: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.contacts_err_unexpected_error, e.message ?: "Unknown Error"), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -462,11 +484,11 @@ class DumpContactsActivity : AppCompatActivity() {
                 }
             }
         } catch (e: SecurityException) {
-            runOnUiThread { Toast.makeText(this, "Error reading call log: Permission denied.", Toast.LENGTH_LONG).show() }
+            runOnUiThread { Toast.makeText(this, "@string/err_call_log_privilege", Toast.LENGTH_LONG).show() }
             e.printStackTrace()
             return emptyList()
         } catch (e: Exception) {
-            runOnUiThread { Toast.makeText(this, "Error reading call log: ${e.message}", Toast.LENGTH_LONG).show() }
+            runOnUiThread { Toast.makeText(this, getString(R.string.err_reading_call_log, e.message ?: "Unknown Error"), Toast.LENGTH_LONG).show() }
             e.printStackTrace()
             return emptyList()
         }
@@ -475,12 +497,14 @@ class DumpContactsActivity : AppCompatActivity() {
 
     private fun exportCallLogToCsv() {
         if (!hasPermission(Manifest.permission.READ_CALL_LOG) || !hasStoragePermissionIfNeeded()) {
-            Toast.makeText(this, "Cannot export call log. Required permissions missing.", Toast.LENGTH_SHORT).show()
+            // Cannot export call log. Required permissions missing.
+            Toast.makeText(this, "@string/err_call_log_privilege", Toast.LENGTH_SHORT).show()
             return
         }
         val callLogData = fetchCallLog()
         if (callLogData.isEmpty()) {
-            Toast.makeText(this, "No call log data to export or permission issue.", Toast.LENGTH_SHORT).show()
+            // No call log data to export or permission issue.
+            Toast.makeText(this, "@string/err_reading_call_log_or_permission_issued", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -525,21 +549,21 @@ class DumpContactsActivity : AppCompatActivity() {
 
             uri?.let {
                 contentResolver.openOutputStream(it).use { outputStream ->
-                    OutputStreamWriter(outputStream).use { writer ->
+                    OutputStreamWriter(outputStream, java.nio.charset.StandardCharsets.UTF_8).use { writer ->
                         writer.write(csvData.toString())
                     }
                 }
-                Toast.makeText(this, "Call log exported to Downloads folder as $dynamicCallLogFileName", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.call_log_success, dynamicCallLogFileName), Toast.LENGTH_LONG).show()
             } ?: run {
-                Toast.makeText(this, "Error creating MediaStore entry for CSV.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "@string/call_log_error", Toast.LENGTH_LONG).show()
             }
 
         } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(this, "Error exporting call log: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.call_log_error_export, e.message ?: "Unknown Error"), Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "An unexpected error occurred during export: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.call_log_error_unexpected, e.message ?: "Unknown Error"), Toast.LENGTH_LONG).show()
         }
     }
 }
